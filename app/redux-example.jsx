@@ -1,13 +1,7 @@
 const redux = require('redux');
 
-const stateDefault = {
-  name: 'Anonymous',
-  hobbies: [],
-  movies: []
-};
-
-let nextHobbyId = 1;
-let nextMovieId = 1;
+// Name reducer and action generators
+// ----------------------------------
 
 let nameReducer = (state = 'Anonymous', action) => {
   switch (action.type) {
@@ -20,6 +14,18 @@ let nameReducer = (state = 'Anonymous', action) => {
   }
 };
 
+let changeName = (name) => {
+  return {
+    type: 'CHANGE_NAME',
+    name
+  }
+};
+
+
+// Hobbies reducer and action generators
+// ----------------------------------
+
+let nextHobbyId = 1;
 let hobbiesReducer = (state = [], action) => {
   switch (action.type) {
     case 'ADD_HOBBY':
@@ -39,6 +45,24 @@ let hobbiesReducer = (state = [], action) => {
   }
 };
 
+let addHobby = (hobby) => {
+  return {
+    type: 'ADD_HOBBY',
+    hobby
+  };
+};
+
+let removeHobby = (id) => {
+  return {
+    type: 'REMOVE_HOBBY',
+    id
+  };
+};
+
+
+// Movies reducer and action generators
+// ----------------------------------
+let nextMovieId = 1;
 let moviesReducer = (state = [], action) => {
   switch (action.type) {
     case 'ADD_MOVIE':
@@ -59,6 +83,22 @@ let moviesReducer = (state = [], action) => {
   }
 };
 
+let addMovie = (genre, movie) => {
+  return {
+    type: 'ADD_MOVIE',
+    genre,
+    movie
+  };
+};
+
+let removeMovie = (id) => {
+  return {
+    type: 'REMOVE_MOVIE',
+    id
+  };
+};
+
+
 let reducer = redux.combineReducers({
   name: nameReducer,
   hobbies: hobbiesReducer,
@@ -76,48 +116,20 @@ const unsubscribe = store.subscribe(() => {
   console.log("name is", state.name);
 });
 
-// you can unsubscribe
-// unsubscribe();
+store.dispatch(changeName('Aaron'));
 
-store.dispatch({
-  type: 'CHANGE_NAME',
-  name: 'Aaron'
-});
+store.dispatch(addMovie('Horror', 'Scream'));
 
-store.dispatch({
-  type: 'ADD_MOVIE',
-  genre: 'Horror',
-  movie: 'Scream'
-});
+store.dispatch(addMovie('Action', 'Last Action Hero'));
 
-store.dispatch({
-  type: 'ADD_MOVIE',
-  genre: 'Action',
-  movie: 'Last Action Hero'
-});
+store.dispatch(addHobby('Running'));
 
-store.dispatch({
-  type: 'ADD_HOBBY',
-  hobby: 'Running'
-});
+store.dispatch(addHobby('Walking'));
 
-store.dispatch({
-  type: 'ADD_HOBBY',
-  hobby: 'Walking'
-});
+store.dispatch(removeHobby(2));
 
-store.dispatch({
-  type: 'REMOVE_HOBBY',
-  id: 2
-});
+store.dispatch(removeMovie(1));
 
-store.dispatch({
-  type: 'REMOVE_MOVIE',
-  id: 1
-});
+store.dispatch(changeName('Bobert'));
 
-store.dispatch({
-  type: 'CHANGE_NAME',
-  name: 'Bobert'
-})
 console.log('Name should be Aaron', store.getState());

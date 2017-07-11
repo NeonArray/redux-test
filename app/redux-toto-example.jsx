@@ -41,7 +41,7 @@ store.dispatch({
 
 store.dispatch({
   type: 'CHANGE_SEARCH_TEXT',
-  searchText: 'teeb'
+  searchText: 'teeb '
 });
 
 console.log('currentState', store.getState());

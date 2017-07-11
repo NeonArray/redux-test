@@ -9,59 +9,61 @@ const stateDefault = {
 let nextHobbyId = 1;
 let nextMovieId = 1;
 
-let reducer = (state = stateDefault, action) => {
-
+let nameReducer = (state = 'Anonymous', action) => {
   switch (action.type) {
     case 'CHANGE_NAME':
-      return {
-        ...state,
-        name: action.name
-      };
-    break;
-    case 'ADD_HOBBY':
-      return {
-        ...state,
-        hobbies: [
-          ...state.hobbies,
-          {
-            id: nextHobbyId++,
-            hobby: action.hobby
-          }
-        ]
-      };
-    break;
-    case 'ADD_MOVIE':
-      return {
-        ...state,
-        movies: [
-          ...state.movies,
-          {
-            id: nextMovieId++,
-            genre: action.genre,
-            movie: action.movie
-          }
-        ]
-      };
-    break;
-    case 'REMOVE_HOBBY':
-      return {
-        ...state,
-        hobbies: state.hobbies.filter((hobby) => hobby.id !== action.id)
-      };
-    break;
-    case 'REMOVE_MOVIE':
-      return {
-        ...state,
-        movies: state.movies.filter((movie) => movie.id !== action.id)
-      };
+      return action.name;
     break;
     default:
       return state;
     break;
   }
-
-  return state;
 };
+
+let hobbiesReducer = (state = [], action) => {
+  switch (action.type) {
+    case 'ADD_HOBBY':
+      return [
+        ...state,
+        {
+            id: nextHobbyId++,
+            hobby: action.hobby
+        }
+      ];
+    break;
+    case 'REMOVE_HOBBY':
+      return state.filter((hobby) => hobby.id !== action.id);
+    default:
+      return state;
+    break;
+  }
+};
+
+let moviesReducer = (state = [], action) => {
+  switch (action.type) {
+    case 'ADD_MOVIE':
+      return [
+        ...state,
+        {
+          id: nextMovieId++,
+          genre: action.genre,
+          movie: action.movie
+        }
+      ];
+    break;
+    case 'REMOVE_MOVIE':
+      return state.filter((movie) => movie.id !== action.id);
+    default:
+      return state;
+    break;
+  }
+};
+
+let reducer = redux.combineReducers({
+  name: nameReducer,
+  hobbies: hobbiesReducer,
+  movies: moviesReducer
+});
 
 // Create a store and enable dev tools
 const store = redux.createStore(reducer, redux.compose(
